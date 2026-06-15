@@ -18,6 +18,7 @@ import numpy as np
 import warnings
 import pickle
 import os
+import matplotlib
 warnings.filterwarnings('ignore')
 
 from sklearn.preprocessing import LabelEncoder, StandardScaler
@@ -553,47 +554,47 @@ def generate_retention_actions(features_df):
         if cp >= 0.75:
             if card >= 3:  # Aurora top tier
                 return ("CALL within 48h", 
-                        "Dedicated retention specialist call. Offer: complimentary Companion Fare + 12-month Status Match guarantee. Budget: up to $450 CDN value.",
+                        "Dedicated retention specialist call. Offer: Complimentary Companion Fare + 12-month Status Match guarantee + waiver of all change/cancel fees for 6 months. Budget: up to $450 CDN value.",
                         "🔴 CRITICAL")
             elif card == 2:  # Nova
                 return ("EMAIL + SMS same day",
-                        "Personalized 'We value you' email + 50,000 bonus points offer conditional on 3 flights in next 90 days. Include tier upgrade roadmap.",
+                        "Personalized 'We value your loyalty' outreach. Offer: Immediate 6-month status bump (to Aurora benefits), 2 complimentary lounge passes, and free preferred seat selection on the next 3 bookings.",
                         "🔴 CRITICAL")
             else:
                 return ("EMAIL within 3 days",
-                        "Reactivation offer: 30,000 bonus points for first flight within 60 days. A/B test subject line: 'Your points are waiting' vs 'Exclusive offer inside'.",
+                        "Reactivation offer: One-time fee waiver on a flight change + Free checked baggage allowance on next 2 flights. A/B test: 'We've saved a seat for you' vs 'Travel better on us'.",
                         "🔴 CRITICAL")
 
         # High risk (50–75%)
         elif cp >= 0.50:
             if trend < -1:  # Strong decline in travel momentum
                 return ("PERSONALIZED OFFER via app push + email",
-                        f"Declining traveler alert. Send 'Travel Like You Used To' campaign: 2x points on next 2 flights. Add destination inspiration based on past routes.",
+                        f"Declining traveler alert. Send 'Priority Access' campaign: Complimentary airport fast-track service and priority boarding on the next 2 flights. Focus on reducing travel friction.",
                         "🟠 HIGH")
             elif red < 0.1 and pts > 20000:  # Hoarding points, not redeeming
-                return ("POINTS EXPIRY NUDGE email",
-                        f"Member has {int(pts):,} unredeemed points. Send 'Your points expire in 180 days' reminder + flight recommendation at current point balance. Urgency drives engagement.",
+                return ("EXPERIENCE-LED NUDGE email",
+                        f"Member has {int(pts):,} points. Send 'Unlock your next getaway' guide: Highlight aspirational routes and 'Redeem for Travel Experiences' rather than just tickets. Showcase zero-fee booking benefits.",
                         "🟠 HIGH")
             else:
                 return ("IN-APP notification + email",
-                        "Send status progress bar showing how close they are to next tier. Offer 'accelerator' bonus: fly 2x in 60 days to jump tier early.",
+                        "Send 'Fast-Track Challenge': Fly 2 segments in the next 60 days to unlock immediate Silver/Gold tier status benefits (Lounge access/Priority boarding) for the remainder of the year.",
                         "🟠 HIGH")
 
         # Medium risk (25–50%)
         elif cp >= 0.25:
             if rec > 6:  # Not flown in 6+ months
                 return ("EMAIL (monthly digest)",
-                        "Include in 'Deals for You' monthly email with 3 personalized route offers based on home city. Add social proof: 'Travellers like you are booking X'.",
+                        "Include in 'Preferred Traveler' monthly email. Highlight new lounge amenities and free inflight Wi-Fi access codes. Add social proof: 'See why our travelers are choosing these routes'.",
                         "🟡 MEDIUM")
             else:
                 return ("LOYALTY MILESTONE reminder",
-                        "Send tier progress update. Highlight benefit unlocked at next tier. Include seasonal travel inspiration for next quarter.",
+                        "Send tier progress update. Highlight the 'Operational Comfort' perks unlocked at next tier (e.g., dedicated check-in, extra legroom). Include seasonal travel inspiration.",
                         "🟡 MEDIUM")
 
         # Low risk (<25%)
         else:
             return ("STANDARD newsletter",
-                    "Include in regular member communications. Upsell co-brand credit card if no record of it. Test new product announcements.",
+                    "Include in regular member communications. Upsell co-brand credit card features (e.g., first bag free, priority security). Test new service and lounge opening announcements.",
                     "🟢 LOW")
 
     actions = features_df.apply(get_action, axis=1)
