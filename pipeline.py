@@ -36,8 +36,8 @@ import shap
 # ─────────────────────────────────────────────────────────────
 # CONSTANTS
 # ─────────────────────────────────────────────────────────────
-DATA_DIR = "/mnt/user-data/uploads"
-OUT_DIR  = "/home/claude/airline_loyalty"
+DATA_DIR = "."
+OUT_DIR  = "."
 
 # Prediction setup: use Jan2017–Sep2018 to predict Oct–Dec2018 churn
 # This avoids data leakage (model only sees past-of-prediction-date data)

@@ -15,6 +15,7 @@ import plotly.express as px
 from plotly.subplots import make_subplots
 import json
 import os
+import shap
 
 # ─────────────────────────────────────────────────────────────
 # PAGE CONFIG – must be first Streamlit call
@@ -163,7 +164,7 @@ SEG_PALETTE = {
 # ─────────────────────────────────────────────────────────────
 @st.cache_data
 def load_data():
-    base = "/home/claude/airline_loyalty"
+    base = "."
     df   = pd.read_csv(f"{base}/members_scored.csv")
     fa   = pd.read_csv(f"{base}/flight_activity_clean.csv")
     shap = pd.read_csv(f"{base}/shap_importance.csv")
@@ -351,7 +352,7 @@ def main():
             fig2.add_annotation(text=f"<b>{n_filtered:,}</b>", x=0.5, y=0.5,
                                   font=dict(size=24, color='#E8EAF0'), showarrow=False)
             fig2.update_layout(**CHART_LAYOUT, height=260, showlegend=True,
-                                legend=dict(orientation='v', x=1, y=0.5, font=dict(size=10)))
+                                )
             st.plotly_chart(fig2, use_container_width=True)
 
         # ── Row 3: Risk × Value scatter + Province heatmap ───
@@ -409,9 +410,7 @@ def main():
                 textfont=dict(size=10, color='#8899BB'),
                 hovertemplate='<b>%{y}</b><br>Avg Risk: %{x:.1%}<br><extra></extra>'
             ))
-            fig4.update_layout(**CHART_LAYOUT, height=280,
-                                xaxis=dict(tickformat='.0%', gridcolor='#1E2A45'),
-                                yaxis=dict(gridcolor='rgba(0,0,0,0)'))
+            fig4.update_layout(**CHART_LAYOUT, height=280)
             st.plotly_chart(fig4, use_container_width=True)
 
         # ── Row 4: Monthly flight trend aggregate ─────────────
@@ -440,7 +439,7 @@ def main():
                 x=monthly['Period'], y=monthly[col_name],
                 fill='tozeroy', name=label,
                 line=dict(color=color, width=2),
-                fillcolor=color.replace('#','rgba(') + ',0.1)' if color.startswith('#') else color,
+                fillcolor='rgba({},{},{},0.1)'.format(int(color[1:3],16),int(color[3:5],16),int(color[5:7],16)) if color.startswith('#') else color,
                 hovertemplate=f'%{{x|%b %Y}}<br>{label}: %{{y:,}}<extra></extra>'
             ), row=1, col=i+1)
         fig5.update_layout(**CHART_LAYOUT, height=220, showlegend=False)
