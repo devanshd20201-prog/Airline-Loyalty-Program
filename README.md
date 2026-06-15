@@ -1,6 +1,6 @@
 # SkyGuard™ — Airline Loyalty Behavioral Intelligence Platform
 
-> Award-submission project for **Unlocking Behavioral Intelligence in Airline Loyalty Programs**
+> Groundbreaking solution for **Unlocking Behavioral Intelligence in Airline Loyalty Programs**
 > Dataset: 16,700 Canadian loyalty members · 2017–2018 · Air Canada-style program
 
 ---
@@ -40,18 +40,18 @@ streamlit run app.py
 
 ```
 airline_loyalty/
-├── pipeline.py              ← ML pipeline (run first)
-├── app.py                   ← Streamlit dashboard
+├── pipeline.py               ML pipeline (run first)
+├── app.py                    Streamlit dashboard
 ├── requirements.txt
 ├── README.md
 │
 ├── [generated after pipeline.py runs]
-├── members_scored.csv       ← All 14,860 members with scores + actions
+├── members_scored.csv        All 14,860 members with scores + actions
 ├── flight_activity_clean.csv
 ├── cluster_profiles.csv
 ├── shap_importance.csv
-├── metrics.json             ← Model evaluation metrics
-└── model.pkl                ← Trained + calibrated model
+├── metrics.json              Model evaluation metrics
+└── model.pkl                 Trained + calibrated model
 ```
 
 ---
@@ -83,7 +83,7 @@ Observation window strictly capped at **Sep 2018** to prevent data leakage.
 - **Threshold**: F1-maximized at 0.162 (not default 0.5)
 - **5-fold CV AUC**: 0.6036 ± 0.0093 | **Full ROC-AUC**: 0.7695
 
-### Segmentation (5 behavioral segments)
+### Segmentation (5 behavioral segments studied deeply in "🎯 Segment Explorer")
 K-Means (k=5, 20 restarts) on StandardScaled behavioral features. Segments are labeled semantically by composite value + engagement scoring — not just statistically separated.
 
 | Segment | Members | Avg Churn Risk |
@@ -94,12 +94,12 @@ K-Means (k=5, 20 restarts) on StandardScaled behavioral features. Segments are l
 | At-Risk Valuables | 31 | 4.5% |
 | Dormant | 1,256 | 5.2% |
 
-### Retention Actions
+### Retention Actions (Found in "🚨 At-Risk Members")
 Non-vague. Each member gets: a **specific channel** (CALL/EMAIL/SMS/IN-APP), a **specific offer** with budget or conditional trigger, and a **suggested timing**. Logic cascades by risk tier × card tier × behavioral signal (momentum, points hoarding, recency).
 
 ---
 
-## Model Metrics
+## Model Metrics ("📊 Model Intelligence")
 
 ```
 ROC-AUC (full train) : 0.7695
@@ -133,7 +133,7 @@ Real-world systems this draws from:
 - [x] Working prototype (Streamlit dashboard, no manual required)
 - [x] Churn prediction model with accuracy metrics
 - [x] Customer segmentation with behavioral profiles
-- [x] Smart retention actions (specific, not vague)
+- [x] Smart retention actions 
 - [x] SHAP explainability per member
 - [x] Data leakage prevention (temporal train/test split)
 - [x] Documented cleaning decisions (salary imputation, churn definition)
