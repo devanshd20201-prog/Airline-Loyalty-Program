@@ -530,14 +530,24 @@ def main():
                 seg_vals.append(sv)
                 all_vals.append(av)
 
-            fig_r = go.Figure()
-            for vals, name, clr in [(all_vals,'Portfolio Avg','#4A5570'), (seg_vals, sel_seg, color)]:
-                fig_r.add_trace(go.Scatterpolar(
-                    r=vals + [vals[0]], theta=radar_labels + [radar_labels[0]],
-                    fill='toself', name=name,
-                    line=dict(color=clr, width=2),
-                    fillcolor=clr.replace('#','rgba(').replace(')','') + ',0.1)' if clr.startswith('#') else clr
-                ))
+            # 🟢 FIXED CODE
+                fig_r = go.Figure()
+                for vals, name, clr in [(all_vals, 'Portfolio Avg', '#4A5570'), (seg_vals, sel_seg, color)]:
+                    # Safely convert Hex to RGBA string
+                    if clr.startswith('#'):
+                        h = clr.lstrip('#')
+                        # Convert hex pairs into Red, Green, Blue integers
+                        r, g, b = tuple(int(h[i:i+2], 16) for i in (0, 2, 4))
+                        rgba_color = f"rgba({r}, {g}, {b}, 0.1)"
+                    else:
+                        rgba_color = clr
+
+                    fig_r.add_trace(go.Scatterpolar(
+                        r=vals + [vals[0]], theta=radar_labels + [radar_labels[0]],
+                        fill='toself', name=name,
+                        line=dict(color=clr, width=2),
+                        fillcolor=rgba_color
+                    ))
             fig_r.update_layout(**CHART_LAYOUT, height=300,
                                   polar=dict(
                                       bgcolor='rgba(0,0,0,0)',
@@ -559,8 +569,7 @@ def main():
                 x=rest_data['Churn_Probability'], nbinsx=30, name='Rest of Portfolio',
                 marker_color='#4A5570', opacity=0.5
             ))
-            fig_dist.update_layout(**CHART_LAYOUT, height=300, barmode='overlay',
-                                    xaxis_title='Churn Probability', yaxis_title='Count')
+            fig_dist.update_layout(**CHART_LAYOUT, height=300, barmode='overlay')
             st.plotly_chart(fig_dist, use_container_width=True)
 
         # ── Card tier × Churn risk heatmap ───────────────────
@@ -580,9 +589,7 @@ def main():
                 text=f"{row.Avg_Risk:.1%} (n={row.Count:,})",
                 textposition='outside', textfont=dict(color='#8899BB')
             ))
-        fig_bar.update_layout(**CHART_LAYOUT, height=250, showlegend=False,
-                               yaxis=dict(tickformat='.0%', gridcolor='#1E2A45'),
-                               yaxis_title='Avg Churn Probability')
+        fig_bar.update_layout(**CHART_LAYOUT, height=250, showlegend=False)
         st.plotly_chart(fig_bar, use_container_width=True)
 
 
@@ -597,7 +604,6 @@ def main():
         </p>
         """, unsafe_allow_html=True)
 
-        # Sort and filter
         risk_thresh = st.select_slider(
             "Show members with churn risk above:",
             options=[0.25, 0.35, 0.50, 0.65, 0.75],
@@ -608,7 +614,6 @@ def main():
         at_risk = filtered[filtered['Churn_Probability'] >= risk_thresh].copy()
         at_risk = at_risk.sort_values('Churn_Probability', ascending=False)
 
-        # Summary bar
         c1,c2,c3,c4 = st.columns(4)
         with c1: st.metric("Members Above Threshold", f"{len(at_risk):,}")
         with c2: st.metric("Aurora Tier At-Risk", f"{len(at_risk[at_risk['Loyalty Card']=='Aurora']):,}")
@@ -617,7 +622,6 @@ def main():
 
         st.markdown("<br>", unsafe_allow_html=True)
 
-        # ── Action priority matrix ─────────────────────────────
         st.markdown('<div class="section-header"><h3>🎯 Action Priority Matrix</h3></div>', unsafe_allow_html=True)
 
         fig_matrix = go.Figure()
@@ -650,7 +654,6 @@ def main():
                                    title=dict(text='High-tenure, high-value members in top-right are highest priority'))
         st.plotly_chart(fig_matrix, use_container_width=True)
 
-        # ── Member intervention cards ─────────────────────────
         st.markdown('<div class="section-header"><h3>📋 Intervention Cards (Top 30)</h3></div>', unsafe_allow_html=True)
 
         top_members = at_risk.head(30)
@@ -687,7 +690,7 @@ def main():
             with col2:
                 st.markdown(f"""
                 <div class="action-card">
-                  <div class="action-channel">📣 {row['Action_Channel']}</div>
+                  <div class="action-channel">⚡ Blueprint: {row['Action_Channel']}</div>
                   <div class="action-desc">{row['Action_Description']}</div>
                   <div style="margin-top:10px;font-size:11px;color:#4A5570">
                     Segment: {row['Segment_Name']} · 
@@ -698,7 +701,6 @@ def main():
                 </div>
                 """, unsafe_allow_html=True)
 
-        # ── Export ────────────────────────────────────────────
         st.markdown("<br>", unsafe_allow_html=True)
         export_cols = ['Loyalty Number','Loyalty Card','Province','Gender',
                        'Churn_Probability','Risk_Level','Segment_Name',
@@ -982,8 +984,8 @@ def main():
                 textposition='outside', textfont=dict(size=10, color='#8899BB')
             ))
             fig_fi.update_layout(**CHART_LAYOUT, height=420,
-                                   xaxis_title='Mean |SHAP Value|',
-                                   yaxis=dict(gridcolor='rgba(0,0,0,0)', autorange='reversed'))
+                                   xaxis_title='Mean |SHAP Value|')
+            fig_fi.update_yaxes(gridcolor='rgba(0,0,0,0)', autorange='reversed')
             st.plotly_chart(fig_fi, use_container_width=True)
 
         # ── CV fold scores ────────────────────────────────────
@@ -1005,7 +1007,6 @@ def main():
                                    annotation_text=f"Mean: {np.mean(cv_aucs):.4f}",
                                    annotation_font_color='#FFD740')
                 fig_cv.update_layout(**CHART_LAYOUT, height=220,
-                                      yaxis=dict(range=[0.5, 0.7], gridcolor='#1E2A45'),
                                       yaxis_title='ROC-AUC')
                 st.plotly_chart(fig_cv, use_container_width=True)
 
