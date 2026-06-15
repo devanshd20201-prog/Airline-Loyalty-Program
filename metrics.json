@@ -1,0 +1,128 @@
+{
+  "cv_auc_mean": 0.6036486259130175,
+  "cv_auc_std": 0.009294175542336115,
+  "cv_aucs": [
+    0.6055042099047487,
+    0.5880231129445319,
+    0.615090909090909,
+    0.6098460278460278,
+    0.5997788697788697
+  ],
+  "roc_auc": 0.7695105851357623,
+  "pr_auc": 0.29981568085238997,
+  "threshold": 0.16221137602826072,
+  "churn_rate": 0.07456258411843876,
+  "n_churned": 1108,
+  "n_total": 14860,
+  "f1_optimal": 0.29772570640937285,
+  "shap_importance": [
+    {
+      "Feature": "Active_Months",
+      "SHAP_Importance": 0.6935559511184692
+    },
+    {
+      "Feature": "Recency_Months",
+      "SHAP_Importance": 0.6407987475395203
+    },
+    {
+      "Feature": "Consistency_Score",
+      "SHAP_Importance": 0.6140856146812439
+    },
+    {
+      "Feature": "Province_Enc",
+      "SHAP_Importance": 0.2985171377658844
+    },
+    {
+      "Feature": "Gender_Enc",
+      "SHAP_Importance": 0.2839791178703308
+    },
+    {
+      "Feature": "Total_Points_Red",
+      "SHAP_Importance": 0.27301469445228577
+    },
+    {
+      "Feature": "Max_Flights_Month",
+      "SHAP_Importance": 0.2692605257034302
+    },
+    {
+      "Feature": "Std_Flights",
+      "SHAP_Importance": 0.23541156947612762
+    },
+    {
+      "Feature": "Marital_Enc",
+      "SHAP_Importance": 0.21933245658874512
+    },
+    {
+      "Feature": "Edu_Rank",
+      "SHAP_Importance": 0.21129906177520752
+    },
+    {
+      "Feature": "Recent_6M_Avg",
+      "SHAP_Importance": 0.20885060727596283
+    },
+    {
+      "Feature": "Card_Rank",
+      "SHAP_Importance": 0.17763647437095642
+    },
+    {
+      "Feature": "Tenure_Months",
+      "SHAP_Importance": 0.1647176444530487
+    },
+    {
+      "Feature": "Total_Flights_Obs",
+      "SHAP_Importance": 0.16297657787799835
+    },
+    {
+      "Feature": "Avg_Flights_Month",
+      "SHAP_Importance": 0.15609294176101685
+    },
+    {
+      "Feature": "Seasonal_Diversity",
+      "SHAP_Importance": 0.1500561386346817
+    },
+    {
+      "Feature": "Redemption_Ratio",
+      "SHAP_Importance": 0.14971917867660522
+    },
+    {
+      "Feature": "Total_Dollar_Red",
+      "SHAP_Importance": 0.14825338125228882
+    },
+    {
+      "Feature": "Activity_Trend",
+      "SHAP_Importance": 0.14683853089809418
+    },
+    {
+      "Feature": "Salary",
+      "SHAP_Importance": 0.12359674274921417
+    },
+    {
+      "Feature": "Travel_Momentum",
+      "SHAP_Importance": 0.10780572146177292
+    },
+    {
+      "Feature": "Avg_Distance_Flight",
+      "SHAP_Importance": 0.09599915146827698
+    },
+    {
+      "Feature": "Total_Points_Acc",
+      "SHAP_Importance": 0.09405814111232758
+    },
+    {
+      "Feature": "Winter_Flights",
+      "SHAP_Importance": 0.0914689376950264
+    },
+    {
+      "Feature": "Total_Distance",
+      "SHAP_Importance": 0.08457240462303162
+    },
+    {
+      "Feature": "YoY_Change",
+      "SHAP_Importance": 0.04269004613161087
+    },
+    {
+      "Feature": "Summer_Flights",
+      "SHAP_Importance": 0.04212848097085953
+    }
+  ]
+}
